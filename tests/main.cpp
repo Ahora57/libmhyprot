@@ -5,6 +5,7 @@
 
 #include "../src/nt.hpp"
 #include "../src/libmhyprot.h"
+#include "../src/mem.h"
 
 #define UDBG(format, ...) printf(format, __VA_ARGS__)
 #define CHECK_HANDLE(x) (x && x != INVALID_HANDLE_VALUE)
@@ -15,17 +16,7 @@
 using unique_handle = std::unique_ptr<void, decltype(&CloseHandle)>;
 
 
-uintptr_t FindDMAAddy( uint32_t target_process_id , uintptr_t ptr, std::vector<unsigned int> offsets)
-{
-    
-    DWORD    addr = ptr;        //for brevent double value(if type == uintptr_t) (work:0x13371337, but need just 0x1337)
-    for (unsigned int i = 0; i < offsets.size(); ++i)
-    {
-     if(offsets[i] != 0  )      //for prevent break value or just dont add 0
-     addr =    libmhyprot::read_process_memory<DWORD>(target_process_id, addr + offsets[i]);
-    }
-    return addr;
-}
+
 
 
 
